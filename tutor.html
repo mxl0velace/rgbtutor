@@ -1,0 +1,105 @@
+<html>
+    <head>
+        <title>rgb i guess</title>
+        <link rel="stylesheet" href="tut.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script>
+            defaulttxt = "input ur guess loser"
+            function dbg(text)
+            {
+                $("#dbg").text(text);
+            }
+            function toHex(num)
+            {
+                hex = "0" + num.toString(16);
+                return hex.substr(hex.length - 2);
+            }
+            $(document).ready(onDocReady);
+            function onDocReady(){
+                buttonClick()
+                $("#but").click(buttonClick);
+                $("#rgbhand").submit(textInput);
+            }
+            function buttonClick(){
+                r = Math.floor(Math.random()*255);
+                g = Math.floor(Math.random()*255);
+                b = Math.floor(Math.random()*255);
+                document.body.style.background = "#"+toHex(r)+toHex(g)+toHex(b);
+                $("#report").css("background-color","#"+toHex(r)+toHex(g)+toHex(b))
+                $("p,h1,h2,h3").css('color',bgfix(r,g,b));
+                $("#result").text(defaulttxt);
+                $("#rgbin").val("");
+                //dbg(r.toString() + ',' + g.toString() + ',' + b.toString() + " : " + document.body.style.backgroundColor);
+            }
+            function bgfix(r,g,b){
+                txtR = 0;
+                txtG = 0;
+                txtB = 0;
+                if(r<128){
+                    txtR = 255
+                }
+                if(g<128){
+                    txtG = 255
+                }
+                if(b<128){
+                    txtB = 255
+                }
+                return "#"+toHex(txtR)+toHex(txtG)+toHex(txtB);
+            }
+            function textInput(){
+                rgb = $("#rgbin").val();
+                r = rgb.substr(0,2);
+                g = rgb.substr(2,2);
+                b = rgb.substr(4,2);
+                $("#report").css("background-color","#"+r+g+b);
+                $("#result").css("color",bgfix(parseInt(r,16),parseInt(g,16),parseInt(b,16)));
+                docrgb = document.body.style.backgroundColor.match(/\d+/g);
+                //dbg(docrgb[0]);
+                roff = Math.abs(parseInt(r,16) - docrgb[0]);
+                goff = Math.abs(parseInt(g,16) - docrgb[1]);
+                boff = Math.abs(parseInt(b,16) - docrgb[2]);
+                off = Math.sqrt(roff*roff+goff*goff+boff*boff);
+                if(off=="NaN"){
+                    $("#result").text("no thanks");
+                }
+                else if(off==0){
+                    $("#result").text("ur a literal god");
+                }
+                else if(off<=15){
+                    $("#result").text("pro web designer");
+                }
+                else if(off<=30){
+                    $("#result").text("yeet");
+                }
+                else if(off<=50){
+                    $("#result").text("semi-yeet");
+                }
+                else if(off<=100){
+                    $("#result").text("getting there");
+                }
+                else if(off<=200){
+                    $("#result").text("not a complete failure");
+                }
+                else{
+                    $("#result").text("fugly");
+                }
+                dbg(off);
+                //document.body.style.background = rgb;
+                return false;
+            }
+        </script>
+    </head>
+    <body>
+        <div id="dbg"></div>
+        <h1>itsa color time yeeeeee</h1>
+        <div id="uinput">
+            <form id="rgbhand">
+            <input type="text" name="rgbin" id="rgbin" maxlength="6">
+            <input type="button" name="but" id="but" value="new color">
+            </form>
+        </div>
+        <div id="report">
+            <p id="result" class="result"/>
+        </div>
+    </body>
+</html>
